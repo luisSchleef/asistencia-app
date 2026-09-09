@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sistema de control de asistencia: marcación de entrada/salida, reportes y gestión de usuarios." />
+    <title>Control de Asistencia</title>
+    <script>
+      // Aplica el tema guardado antes del primer render (evita el flash
+      // de tema incorrecto). La fuente de verdad en React es useTema.
+      ;(function () {
+        var t = localStorage.getItem('tema')
+        if (t !== 'claro' && t !== 'oscuro') {
+          t = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro'
+        }
+        document.documentElement.dataset.tema = t
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

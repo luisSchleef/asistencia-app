@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/asistencias}
+    username: ${DB_USERNAME:asistencias}
+    password: ${DB_PASSWORD:asistencias}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    locations: classpath:db/migration
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:dev-secret-no-usar-en-produccion-0123456789-abcdef}
+    expiracion-minutos: ${JWT_EXPIRACION_MINUTOS:480}
+  cors:
+    origins: ${CORS_ORIGINS:http://localhost:5173}
+  horario:
+    entrada: ${HORARIO_ENTRADA:09:30}
+    salida: ${HORARIO_SALIDA:17:30}
+
+server:
+  port: 8080

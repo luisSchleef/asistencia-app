@@ -1,0 +1,28 @@
+# ===== Java / Maven (backend) =====
+backend/target/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# ===== Node (frontend) =====
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+
+# ===== IDEs =====
+.idea/
+.vscode/
+*.iml
+
+# ===== Sistema operativo =====
+.DS_Store
+Thumbs.db
+
+# ===== Secretos =====
+.env
+.env.*
+!.env.example
+
+# ===== Docker =====
+postgres-data/
