@@ -185,7 +185,7 @@ function FormularioUsuario({ editando, esNuevo, onGuardado, onCancelar }: {
         {erroresCampo.correo && <span className="error-campo">{erroresCampo.correo}</span>}
       </label>
       <label>
-        Contraseña {esNuevo ? '' : '(vacía = sin cambio)'}
+        Contraseña
         <input
           type="password"
           value={contrasena}
