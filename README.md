@@ -66,14 +66,14 @@ docker start asistencias-postgres-dev   # o crear uno nuevo: ver README históri
 cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
 # 3. Frontend (Vite con proxy /api → :8080)
-cd frontend && npm run dev
+cd frontend && pnpm run dev
 ```
 
 ### Pruebas
 
 ```bash
 cd backend && ./mvnw test   # 18 tests de integración contra Postgres real (Testcontainers)
-cd frontend && npm run build && npm run lint
+cd frontend && pnpm run build && pnpm run lint
 ```
 
 ## Usuarios iniciales

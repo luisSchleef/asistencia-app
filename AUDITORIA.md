@@ -234,7 +234,7 @@ Eliminar una persona borra todas sus marcas. Para un sistema de asistencia, esto
 - El backend aplica autorización real con `@PreAuthorize`, no depende de la UI.
 - El modelo Flyway + `ddl-auto: validate` es una buena garantía de consistencia del esquema.
 - Se usan `EntityGraph` y `JOIN FETCH` para evitar N+1 en rutas principales.
-- El frontend emplea `npm ci`, y el backend usa pruebas de integración con PostgreSQL real mediante Testcontainers.
+- El frontend emplea `pnpm install --frozen-lockfile`, y el backend usa pruebas de integración con PostgreSQL real mediante Testcontainers.
 
 ### Mejoras recomendadas
 
@@ -251,7 +251,7 @@ Eliminar una persona borra todas sus marcas. Para un sistema de asistencia, esto
   - Las pestañas de reportes deberían usar el patrón WAI-ARIA Tabs o botones convencionales.
   - Los errores de formularios deben asociarse con `aria-invalid` y `aria-describedby`.
 - Fijar versiones/digests de imágenes Docker en vez de etiquetas móviles como `nginx:alpine` y `node:22-alpine`.
-- Añadir CI para `./mvnw test`, `npm run build`, `npm run lint`, escaneo de dependencias e imágenes.
+- Añadir CI para `./mvnw test`, `pnpm run build`, `pnpm run lint`, escaneo de dependencias e imágenes.
 
 ## Diagnósticos del editor
 
