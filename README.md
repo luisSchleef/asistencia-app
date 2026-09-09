@@ -26,7 +26,7 @@ Proyecto evolucionado desde un MVP de escritorio (Java Swing + SQLite) hacia una
 
 | Pieza | Tecnología | Detalle |
 |---|---|---|
-| Frontend | React 19, TypeScript, Vite, React Router 7, Zustand, Axios | SPA con rutas protegidas por rol; interceptor JWT |
+| Frontend | React 19, TypeScript, Vite, React Router 7, Zustand, Axios (pnpm) | SPA con rutas protegidas por rol; interceptor JWT |
 | Backend | Spring Boot 4, Java 21, Spring Security, JPA/Hibernate, Flyway, springdoc | API REST con JWT (HMAC-SHA512), roles ADMIN/EMPLEADO con `@PreAuthorize` |
 | Base de datos | PostgreSQL 16 | Migraciones versionadas (Flyway), esquema validado por Hibernate |
 | Infraestructura | Docker Compose, nginx, Testcontainers (tests) | Multi-stage builds; proxy nginx elimina CORS |
@@ -60,7 +60,9 @@ docker compose up -d --build
 
 ```bash
 # 1. BD: contenedor dev de Postgres (mismo esquema vía Flyway)
-docker start asistencias-postgres-dev   # o crear uno nuevo: ver README histórico
+docker run -d --name asistencias-postgres-dev -p 5432:5432 \
+  -e POSTGRES_USER=asistencias -e POSTGRES_PASSWORD=asistencias -e POSTGRES_DB=asistencias \
+  postgres:16-alpine
 
 # 2. Backend (perfil dev = siembra datos de prueba)
 cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
