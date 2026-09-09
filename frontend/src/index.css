@@ -1,64 +1,64 @@
 :root {
 
-  --fondo: #eef1f7;
-  --tarjeta: #ffffff;
-  --tarjeta-2: #f7f9fc;
-  --texto: #17203a;
-  --texto-suave: #5b6478;
-  --primario: #4f46e5;
-  --primario-oscuro: #4338ca;
-  --primario-suave: #eceefe;
-  --primario-texto: #ffffff;
+  --fondo: #eafaf2;
+  --tarjeta: #9df4d1;
+  --tarjeta-2: #7deac2;
+  --texto: #3a345e;
+  --texto-suave: #655e8a;
+  --primario: #3a345e;
+  --primario-oscuro: #2e2949;
+  --primario-suave: #c9f5e2;
+  --primario-texto: #9df4d1;
   --peligro: #dc2626;
   --peligro-oscuro: #b91c1c;
   --peligro-suave: #fdecec;
-  --ok: #16a34a;
-  --ok-oscuro: #15803d;
-  --ok-suave: #e7f6ec;
+  --ok: #149d63;
+  --ok-oscuro: #0f8a55;
+  --ok-suave: #d9f6ea;
   --aviso: #d97706;
   --aviso-oscuro: #b45309;
   --aviso-suave: #fdf3e3;
-  --borde: #dde3ee;
+  --borde: #86ecca;
 
-  --sombra-sm: 0 1px 2px rgb(15 23 42 / 0.06);
-  --sombra: 0 4px 16px rgb(15 23 42 / 0.08);
-  --sombra-lg: 0 16px 40px rgb(15 23 42 / 0.16);
+  --sombra-sm: 0 1px 2px rgb(58 52 94 / 0.08);
+  --sombra: 0 4px 16px rgb(58 52 94 / 0.12);
+  --sombra-lg: 0 16px 40px rgb(58 52 94 / 0.2);
   --radio: 14px;
   --radio-sm: 10px;
 
-  --brillo-1: rgb(79 70 229 / 0.22);
-  --brillo-2: rgb(14 165 233 / 0.18);
+  --brillo-1: rgb(58 52 94 / 0.16);
+  --brillo-2: rgb(157 244 209 / 0.5);
 
   color-scheme: light;
 }
 
 [data-tema='oscuro'] {
-  --fondo: #0b1120;
-  --tarjeta: #131c30;
-  --tarjeta-2: #0f1728;
-  --texto: #e6eaf3;
-  --texto-suave: #93a0b8;
-  --primario: #818cf8;
-  --primario-oscuro: #6d75f6;
-  --primario-suave: #20294a;
-  --primario-texto: #101528;
+  --fondo: #262043;
+  --tarjeta: #3a345e;
+  --tarjeta-2: #322c52;
+  --texto: #9df4d1;
+  --texto-suave: #a49bcb;
+  --primario: #9df4d1;
+  --primario-oscuro: #7fe9bd;
+  --primario-suave: #4a4377;
+  --primario-texto: #2c2650;
   --peligro: #f87171;
   --peligro-oscuro: #ef6262;
   --peligro-suave: #3a1d24;
   --ok: #4ade80;
   --ok-oscuro: #34d371;
-  --ok-suave: #14301f;
+  --ok-suave: #2c4a3a;
   --aviso: #fbbf24;
   --aviso-oscuro: #f5a90b;
-  --aviso-suave: #38290f;
-  --borde: #26334d;
+  --aviso-suave: #43361a;
+  --borde: #4b4478;
 
   --sombra-sm: 0 1px 2px rgb(0 0 0 / 0.4);
   --sombra: 0 4px 16px rgb(0 0 0 / 0.45);
   --sombra-lg: 0 16px 40px rgb(0 0 0 / 0.55);
 
-  --brillo-1: rgb(129 140 248 / 0.16);
-  --brillo-2: rgb(56 189 248 / 0.12);
+  --brillo-1: rgb(157 244 209 / 0.12);
+  --brillo-2: rgb(58 52 94 / 0.5);
 
   color-scheme: dark;
 }
