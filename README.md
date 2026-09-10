@@ -78,6 +78,48 @@ cd backend && ./mvnw test   # 18 tests de integración contra Postgres real (Tes
 cd frontend && pnpm run build && pnpm run lint
 ```
 
+## Deploy demo en la nube
+
+La demo desplegada separa frontend y backend en dos plataformas (Vercel no aloja Java ni Postgres):
+
+```text
+┌──────────────┐  HTTPS (CORS)   ┌────────────────────────────┐  JDBC   ┌──────────────────────┐
+│ Vercel       │ ──────────────► │ Railway                    │ ──────► │ Railway PostgreSQL   │
+│ (React SPA)  │                 │ Spring Boot (Dockerfile)   │         │ (Flyway al arrancar) │
+└──────────────┘                 └────────────────────────────┘         └──────────────────────┘
+```
+
+| Pieza | Plataforma | Configuración |
+|---|---|---|
+| Frontend (SPA) | Vercel | Root Directory `frontend/`, build Vite + pnpm (auto-detectado) |
+| Backend (API) | Railway | Dockerfile `backend/Dockerfile`, dominio público puerto `8080` |
+| Base de datos | Railway PostgreSQL | Migraciones Flyway se aplican solas al primer arranque |
+
+### Variables de entorno del deploy
+
+**Vercel (frontend):**
+
+| Variable | Valor | Propósito |
+|---|---|---|
+| `VITE_API_URL` | `https://<backend>.up.railway.app/api` | Base URL de la API; si no existe, cae a `/api` (proxy local de Vite) |
+
+**Railway (servicio backend):**
+
+| Variable | Valor | Propósito |
+|---|---|---|
+| `DB_URL` | `jdbc:postgresql://<PGHOST>:<PGPORT>/<PGDATABASE>` | Conexión al Postgres del mismo proyecto |
+| `DB_USERNAME` | valor de `PGUSER` | Usuario de la BD |
+| `DB_PASSWORD` | valor de `PGPASSWORD` | Clave de la BD |
+| `JWT_SECRET` | secreto ≥ 64 caracteres | Firma HMAC-SHA512 (el default de `application.yml` no alcanza) |
+| `CORS_ORIGINS` | `https://<app>.vercel.app` | Origen(es) permitidos, lista separada por comas |
+
+### Detalles
+
+- **`baseURL` configurable**: `frontend/src/api/client.ts` usa `import.meta.env.VITE_API_URL ?? '/api'`; en local sigue funcionando con el proxy de Vite sin configurar nada.
+- **SPA fallback en Vercel**: `frontend/vercel.json` reescribe cualquier ruta a `index.html` para React Router (en el deploy dockerizado lo hace nginx).
+- **CORS**: en la nube SPA y API son orígenes distintos, por lo que el backend valida `Origin` contra `CORS_ORIGINS` (en el deploy dockerizado, nginx mantiene mismo origen y esto es irrelevante).
+- **Redespliegues**: los pushes a `main` redespliegan ambas plataformas automáticamente ( Railway vía GitHub App, Vercel vía integración).
+
 ## Usuarios iniciales
 
 | Correo | Contraseña | Rol | Origen |
@@ -125,6 +167,7 @@ asistencias-app/
 │   │   ├── pages/         # Login, Menú, Asistencias, Reportes, Usuarios
 │   │   └── types/         # espejo TS de los DTOs del backend
 │   ├── nginx.conf         # proxy /api → backend + SPA fallback
+│   ├── vercel.json        # SPA fallback para el deploy en Vercel
 │   └── Dockerfile         # multi-stage: Node build → nginx
 ├── docker-compose.yml     # postgres + backend + frontend (red interna, healthcheck)
 ├── .env.example           # plantilla de secretos (.env está en .gitignore)
@@ -136,7 +179,7 @@ asistencias-app/
 
 - **JWT stateless + rol recargado por petición**: el token viaja en cada request, pero el rol se lee de la BD (revocación de permisos instantánea).
 - **Autorización en dos capas**: la UI oculta lo admin (guards de ruta) y el backend lo obliga (`@PreAuthorize`).
-- **Mismo origen siempre**: en dev el proxy de Vite reenvía `/api`; en producción lo hace nginx. El backend ni siquiera necesita CORS en el deploy dockerizado.
+- **Mismo origen por defecto**: en dev el proxy de Vite reenvía `/api`; en el deploy dockerizado lo hace nginx, sin CORS. Solo el deploy en la nube (SPA en Vercel + API en Railway) necesita CORS, configurado vía `CORS_ORIGINS`.
 - **Esquema solo por migraciones**: `ddl-auto: validate` garantiza que el código JPA y el esquema Flyway estén siempre sincronizados.
 - **Datos de prueba aislados**: el seeder solo existe bajo el perfil `dev`; producción nunca los recibe.
 
