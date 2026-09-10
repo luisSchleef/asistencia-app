@@ -42,13 +42,6 @@ Requiere Docker + Compose v2 y puertos libres `5173` y `8080`.
 # Crea .env si falta, genera JWT_SECRET y ejecuta docker compose up -d --build
 ```
 
-O manual (ej. Windows sin Git Bash):
-
-```bash
-cp .env.example .env   # y poner valores reales (JWT_SECRET, clave de BD)
-docker compose up -d --build
-```
-
 > Sin `.env` el stack igual arranca con valores por defecto (solo demo local).
 
 - **App web**: http://localhost:5173
@@ -56,31 +49,9 @@ docker compose up -d --build
 - Parar: `docker compose down` (los datos persisten en el volumen `pgdata`)
 - Borrar datos: `docker compose down -v` (cuidado: elimina la BD)
 
-### Desarrollo (sin Docker para app y backend)
-
-```bash
-# 1. BD: contenedor dev de Postgres (mismo esquema vía Flyway)
-docker run -d --name asistencias-postgres-dev -p 5432:5432 \
-  -e POSTGRES_USER=asistencias -e POSTGRES_PASSWORD=asistencias -e POSTGRES_DB=asistencias \
-  postgres:16-alpine
-
-# 2. Backend (perfil dev = siembra datos de prueba)
-cd backend && ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
-
-# 3. Frontend (Vite con proxy /api → :8080)
-cd frontend && pnpm run dev
-```
-
-### Pruebas
-
-```bash
-cd backend && ./mvnw test   # 18 tests de integración contra Postgres real (Testcontainers)
-cd frontend && pnpm run build && pnpm run lint
-```
-
 ## Deploy demo en la nube
 
-La demo desplegada separa frontend y backend en dos plataformas (Vercel no aloja Java ni Postgres):
+La demo desplegada separa frontend y backend en dos plataformas:
 
 ```text
 ┌──────────────┐  HTTPS (CORS)   ┌────────────────────────────┐  JDBC   ┌──────────────────────┐
@@ -91,41 +62,15 @@ La demo desplegada separa frontend y backend en dos plataformas (Vercel no aloja
 
 | Pieza | Plataforma | Configuración |
 |---|---|---|
-| Frontend (SPA) | Vercel | Root Directory `frontend/`, build Vite + pnpm (auto-detectado) |
-| Backend (API) | Railway | Dockerfile `backend/Dockerfile`, dominio público puerto `8080` |
-| Base de datos | Railway PostgreSQL | Migraciones Flyway se aplican solas al primer arranque |
-
-### Variables de entorno del deploy
-
-**Vercel (frontend):**
-
-| Variable | Valor | Propósito |
-|---|---|---|
-| `VITE_API_URL` | `https://<backend>.up.railway.app/api` | Base URL de la API; si no existe, cae a `/api` (proxy local de Vite) |
-
-**Railway (servicio backend):**
-
-| Variable | Valor | Propósito |
-|---|---|---|
-| `DB_URL` | `jdbc:postgresql://<PGHOST>:<PGPORT>/<PGDATABASE>` | Conexión al Postgres del mismo proyecto |
-| `DB_USERNAME` | valor de `PGUSER` | Usuario de la BD |
-| `DB_PASSWORD` | valor de `PGPASSWORD` | Clave de la BD |
-| `JWT_SECRET` | secreto ≥ 64 caracteres | Firma HMAC-SHA512 (el default de `application.yml` no alcanza) |
-| `CORS_ORIGINS` | `https://<app>.vercel.app` | Origen(es) permitidos, lista separada por comas |
-
-### Detalles
-
-- **`baseURL` configurable**: `frontend/src/api/client.ts` usa `import.meta.env.VITE_API_URL ?? '/api'`; en local sigue funcionando con el proxy de Vite sin configurar nada.
-- **SPA fallback en Vercel**: `frontend/vercel.json` reescribe cualquier ruta a `index.html` para React Router (en el deploy dockerizado lo hace nginx).
-- **CORS**: en la nube SPA y API son orígenes distintos, por lo que el backend valida `Origin` contra `CORS_ORIGINS` (en el deploy dockerizado, nginx mantiene mismo origen y esto es irrelevante).
-- **Redespliegues**: los pushes a `main` redespliegan ambas plataformas automáticamente ( Railway vía GitHub App, Vercel vía integración).
+| Frontend (SPA) | Vercel |
+| Backend (API) | Railway |
+| Base de datos | Railway PostgreSQL |
 
 ## Usuarios iniciales
 
 | Correo | Contraseña | Rol | Origen |
 |---|---|---|---|
 | `admin@empresa.cl` | `admin123` | ADMIN | migración V2 (cambiar al primer uso) |
-| `javi@empresa.cl` etc. | `clave123` | EMPLEADO | solo en desarrollo (DataSeeder, perfil `dev`) |
 
 ## API (resumen)
 
