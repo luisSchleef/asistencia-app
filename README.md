@@ -6,6 +6,10 @@ Proyecto evolucionado desde un MVP de escritorio (Java Swing + SQLite) hacia una
 
 - **Web**: https://frontend-flame-six-2nkut5o8mg.vercel.app/login
 
+| Correo | Contraseña | Rol |
+|---|---|---|
+| `admin@empresa.cl` | `admin123` | ADMIN |
+
 ## Arquitectura
 
 ```text
@@ -68,12 +72,6 @@ La demo desplegada separa frontend y backend en dos plataformas:
 | Backend (API) | Railway |
 | Base de datos | Railway PostgreSQL |
 
-## Usuarios iniciales
-
-| Correo | Contraseña | Rol | Origen |
-|---|---|---|---|
-| `admin@empresa.cl` | `admin123` | ADMIN | migración V2 (cambiar al primer uso) |
-
 ## API (resumen)
 
 | Método y ruta | Acceso | Descripción |
@@ -86,8 +84,6 @@ La demo desplegada separa frontend y backend en dos plataformas:
 | `GET /api/reportes/salidas-anticipadas` | ADMIN | Salidas antes del límite (default 17:30) |
 | `GET /api/reportes/inasistencias` | ADMIN | Días hábiles sin marcación |
 | CRUD `/api/usuarios` | ADMIN | Crear / listar / actualizar / eliminar (no auto-eliminación) |
-
-Errores JSON consistentes: 400 (validación con detalle por campo), 401, 403, 404, 409 (correo duplicado, auto-eliminación).
 
 ## Estructura del monorepo
 
@@ -121,14 +117,6 @@ asistencias-app/
 ├── setup.sh               # bootstrap: crea .env, genera JWT y levanta el stack
 └── README.md
 ```
-
-## Decisiones de diseño destacadas
-
-- **JWT stateless + rol recargado por petición**: el token viaja en cada request, pero el rol se lee de la BD (revocación de permisos instantánea).
-- **Autorización en dos capas**: la UI oculta lo admin (guards de ruta) y el backend lo obliga (`@PreAuthorize`).
-- **Mismo origen por defecto**: en dev el proxy de Vite reenvía `/api`; en el deploy dockerizado lo hace nginx, sin CORS. Solo el deploy en la nube (SPA en Vercel + API en Railway) necesita CORS, configurado vía `CORS_ORIGINS`.
-- **Esquema solo por migraciones**: `ddl-auto: validate` garantiza que el código JPA y el esquema Flyway estén siempre sincronizados.
-- **Datos de prueba aislados**: el seeder solo existe bajo el perfil `dev`; producción nunca los recibe.
 
 ## Posibles mejoras (roadmap)
 
