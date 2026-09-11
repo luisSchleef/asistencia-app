@@ -37,7 +37,7 @@ Proyecto evolucionado desde un MVP de escritorio (Java Swing + SQLite) hacia una
 | Base de datos | PostgreSQL 16 | Migraciones versionadas (Flyway), esquema validado por Hibernate |
 | Infraestructura | Docker Compose, nginx, Testcontainers (tests) | Multi-stage builds; proxy nginx elimina CORS |
 
-## Cómo correr
+## Cómo correr (para desarrollo)
 
 ### Con Docker (todo el stack)
 
