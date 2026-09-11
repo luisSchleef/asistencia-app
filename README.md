@@ -66,8 +66,8 @@ La demo desplegada separa frontend y backend en dos plataformas:
 └──────────────┘                 └────────────────────────────┘         └──────────────────────┘
 ```
 
-| Pieza | Plataforma | Configuración |
-|---|---|---|
+| Pieza | Plataforma |
+|---|---|
 | Frontend (SPA) | Vercel |
 | Backend (API) | Railway |
 | Base de datos | Railway PostgreSQL |
